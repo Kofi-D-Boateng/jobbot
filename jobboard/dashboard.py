@@ -2,12 +2,12 @@
 class DashBoard:
     setOfJDLinks:set
     profilelink:str
-    typeOfJobs:list
-    locations:list
-    employmentType:list
+    typeOfJobs:set
+    locations:set
+    employmentType:set
     priceRange:tuple
 
-    def __init__(self,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple) -> None:
+    def __init__(self,typeOfJobs:set,locations:set,employmentType:set,priceRange:tuple) -> None:
         self.typeOfJobs = typeOfJobs
         self.locations = locations
         employmentType = employmentType

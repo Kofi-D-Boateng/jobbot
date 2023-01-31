@@ -9,7 +9,7 @@ class JobBot:
     resume:IO[str]
     sites:set
     jobDescDict:dict
-     
+
     def __init__(self,userPassDict:dict,sites:set) -> None:
         self.userPassDict = userPassDict
         self.sites = sites
@@ -17,7 +17,7 @@ class JobBot:
         self.jobDescDict = dict()
 
 
-    def start(self,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple) -> None:
+    def start(self,typeOfJobs:set,locations:set,employmentType:set,priceRange:tuple) -> None:
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         chrome = webdriver.Chrome(executable_path="./chromedriver",chrome_options=options)
@@ -50,7 +50,7 @@ class JobBot:
     def load_resume(self)->None: 
         pass
     
-    def linkedIn(self,driver,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple)->None:
+    def linkedIn(self,driver,typeOfJobs:set,locations:set,employmentType:set,priceRange:tuple)->None:
         dash:linkedIn.LinkedinDashBoard = linkedIn.LinkedinDashBoard(typeOfJobs,locations,employmentType,priceRange)
         username,password = self.userPassDict.get("linkedIn")["username"],self.userPassDict.get("linkedIn")["password"]
         self.isLoggedIn = dash.login(username,password,driver)
@@ -64,7 +64,7 @@ class JobBot:
             print("You are not logged into linkedIn, please check your credentials.")    
 
 
-    def indeed(self,driver,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple) ->None:
+    def indeed(self,driver,typeOfJobs:set,locations:set,employmentType:set,priceRange:tuple) ->None:
         dash:indeed.IndeedDashBoard = indeed.IndeedDashBoard(typeOfJobs,locations,employmentType,priceRange)
         username,password = self.userPassDict.get("indeed")["username"],self.userPassDict.get("indeed")["password"]
         self.isLoggedIn = dash.login(username,password,driver)
@@ -77,7 +77,7 @@ class JobBot:
         else:
             print("You are not logged into indeed, please check your credentials.") 
 
-    def ziprecruiter(self,driver,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple)->None:
+    def ziprecruiter(self,driver,typeOfJobs:set,locations:set,employmentType:set,priceRange:tuple)->None:
         dash:ziprecruiter.ZipRecruiterDashBoard = ziprecruiter.ZipRecruiterDashBoard(typeOfJobs,locations,employmentType,priceRange)
         username,password = self.userPassDict.get("ziprecruiter")["username"],self.userPassDict.get("ziprecruiter")["password"]
         self.isLoggedIn = dash.login(username,password,driver)
@@ -86,6 +86,6 @@ class JobBot:
         driver.sleep(2000)
         if self.isLoggedIn:
             dash.search(driver)
-            self.jobDescDict.setdefault("indeed",dash.getJDs())
+            self.jobDescDict.setdefault("ziprecruiter",dash.getJDs())
         else:
-            print("You are not logged into indeed, please check your credentials.")
+            print("You are not logged into ziprecruiter, please check your credentials.")

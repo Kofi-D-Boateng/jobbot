@@ -8,11 +8,13 @@ class JobBot:
     isLoggedIn:bool
     resume:IO[str]
     sites:set
-    jobDescDict:dict 
-    def __init__(self,userPassDict:dict,sites:list) -> None:
+    jobDescDict:dict
+     
+    def __init__(self,userPassDict:dict,sites:set) -> None:
         self.userPassDict = userPassDict
         self.sites = sites
-        self
+        self.isLoggedIn = False
+        self.jobDescDict = dict()
 
 
     def start(self,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple) -> None:
@@ -54,7 +56,7 @@ class JobBot:
         self.isLoggedIn = dash.login(username,password,driver)
         # Sleep Driver once logged in
         # Handles searching logic for Job Descriptions based on your preferences
-
+        driver.sleep(2000)
         if self.isLoggedIn: 
             dash.search(driver)
             self.jobDescDict.setdefault("linkedIn",dash.getJDs())
@@ -68,8 +70,12 @@ class JobBot:
         self.isLoggedIn = dash.login(username,password,driver)
         # Sleep Driver once logged in
         # Handles searching logic for Job Descriptions based on your preferences
-        dash.search(driver)
-        self.jobDescDict.setdefault("indeed",dash.getJDs())
+        driver.sleep(2000)
+        if self.isLoggedIn:
+            dash.search(driver)
+            self.jobDescDict.setdefault("indeed",dash.getJDs())
+        else:
+            print("You are not logged into indeed, please check your credentials.") 
 
     def ziprecruiter(self,driver,typeOfJobs:list,locations:list,employmentType:list,priceRange:tuple)->None:
         dash:ziprecruiter.ZipRecruiterDashBoard = ziprecruiter.ZipRecruiterDashBoard(typeOfJobs,locations,employmentType,priceRange)
@@ -77,5 +83,9 @@ class JobBot:
         self.isLoggedIn = dash.login(username,password,driver)
         # Sleep Driver once logged in
         # Handles searching logic for Job Descriptions based on your preferences
-        dash.search(driver)
-        self.jobDescDict.setdefault("ziprecruiter",dash.getJDs())
+        driver.sleep(2000)
+        if self.isLoggedIn:
+            dash.search(driver)
+            self.jobDescDict.setdefault("indeed",dash.getJDs())
+        else:
+            print("You are not logged into indeed, please check your credentials.")
